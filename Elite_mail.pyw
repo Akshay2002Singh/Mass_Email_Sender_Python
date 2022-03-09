@@ -206,9 +206,6 @@ if __name__=="__main__":
     Subject=StringVar()
     # Body=StringVar()
 
-    From_email.set("ds2020.ipec@gmail.com")
-    Password.set("Dsipec2020@")
-
     statusvar = StringVar()
     statusvar.set("Ready To Go On a Ride")
     CSV_file_loaction.set(f"Selected Senders file :- {CSV_file.get()}")
