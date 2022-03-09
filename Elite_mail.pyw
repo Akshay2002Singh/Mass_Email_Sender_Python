@@ -7,6 +7,7 @@ import threading
 from tkinter.filedialog import askopenfilename
 from tkinter import *
 from time import sleep
+from turtle import left
 import pandas as pd
 import os
 
@@ -165,8 +166,8 @@ def Select_file():
     CSV_file_loaction.set(f"Selected file :- {CSV_file.get()}")
 
 def attach_file():
-    file=askopenfilename(defaultextension=".txt",filetypes=[("All Files","*")])
-    attachment_file.set(file)
+    file_attachment=askopenfilename(defaultextension=".txt",filetypes=[("All Files","*")])
+    attachment_file.set(file_attachment)
     attachment_file_loaction.set(f"Selected file :- {attachment_file.get()}")
 
 # main body
@@ -213,7 +214,7 @@ if __name__=="__main__":
     Entry(f1,textvariable=Password,font="calibre 15 normal",fg="blue",relief=SUNKEN,width=35).pack()
     senders_file_location=Label(f1,textvariable=CSV_file_loaction,font="calibre 10 bold italic",relief=FLAT,padx=18,pady=3)
     senders_file_location.pack()
-    attachment=Label(f1,textvariable=CSV_file_loaction,font="calibre 10 bold italic",relief=FLAT,padx=18,pady=3)
+    attachment=Label(f1,textvariable=attachment_file_loaction,font="calibre 10 bold italic",relief=FLAT,padx=18,pady=3)
     attachment.pack()
     space=Label(f1,text="",font="calibre 1 bold").pack()
     Label(f1,text="Subject Of Mail",font="calibre 18 bold italic",relief=FLAT,padx=8,pady=5).pack()
@@ -232,10 +233,13 @@ if __name__=="__main__":
     Select_file.pack(side = LEFT, expand = True, fill = X,pady=3)
     clear_url_btn=Button(f1,text="CLEAR URL",command=clear_url_box,bd=5,font="calibre 18 bold")
     clear_url_btn.pack(side = LEFT, expand = True, fill = X,pady=3)
-    attachment_btn=Button(f1,text="ATTACH",command=attach_file,bd=5,fg="blue",font="calibre 18 bold")
-    attachment.pack(side = LEFT, expand = True, fill = X,pady=3)
+    # attachment_btn=Button(f1,text="ATTACH",command=attach_file,bd=5,fg="blue",font="calibre 18 bold")
+    # attachment.pack(side = LEFT, expand = True, fill = X,pady=3)
     send=Button(f1,text="SEND",command=send_start,bd=5,fg="blue",font="calibre 18 bold")
     send.pack(side = LEFT, expand = True, fill = X,pady=3)
+    attachment_btn=Button(root,text="ATTACH",command=attach_file,bd=5,fg="blue",font="calibre 18 bold")
+    attachment_btn.pack(side=TOP)
+
     # statusbar 
     sbar = Label(root,textvariable=statusvar, relief=SUNKEN, anchor="w",padx=10,pady=7,background="cyan",fg="red",font="calibre 12 bold")
     sbar.pack(side=BOTTOM, fill=X)
