@@ -180,12 +180,12 @@ def Start_task():
 def Select_file():
     file=askopenfilename(defaultextension=".xlsx",filetypes =[('Excel Files', '*.xlsx'),('CSV Files', '*.csv')])
     CSV_file.set(file)
-    CSV_file_loaction.set(f"Selected file :- {CSV_file.get()}")
+    CSV_file_loaction.set(f"Selected Senders file :- {CSV_file.get()}")
 
 def attach_file():
     file_attachment=askopenfilename(defaultextension=".txt",filetypes=[("All Files","*")])
     attachment_file.set(file_attachment)
-    attachment_file_loaction.set(f"Selected file :- {attachment_file.get()}")
+    attachment_file_loaction.set(f"Selected attachment file :- {attachment_file.get()}")
 
 # main body
 if __name__=="__main__":
@@ -211,8 +211,8 @@ if __name__=="__main__":
 
     statusvar = StringVar()
     statusvar.set("Ready To Go On a Ride")
-    CSV_file_loaction.set(f"Selected file :- {CSV_file.get()}")
-    attachment_file_loaction.set(f"Selected file :- {attachment_file.get()}")
+    CSV_file_loaction.set(f"Selected Senders file :- {CSV_file.get()}")
+    attachment_file_loaction.set(f"Selected attachment file :- {attachment_file.get()}")
 
     # code to download a video
     heading1=Label(root,text="ELITE AKSHAY",font="calibre 20 bold",relief=RAISED,background="white",padx=10,pady=9)
@@ -254,7 +254,7 @@ if __name__=="__main__":
     # attachment.pack(side = LEFT, expand = True, fill = X,pady=3)
     send=Button(f1,text="SEND",command=send_start,bd=5,fg="blue",font="calibre 18 bold")
     send.pack(side = LEFT, expand = True, fill = X,pady=3)
-    attachment_btn=Button(root,text="ATTACH",command=attach_file,bd=5,fg="blue",font="calibre 18 bold")
+    attachment_btn=Button(root,text="ATTACH FILE",command=attach_file,bd=5,fg="blue",font="calibre 18 bold")
     attachment_btn.pack(side=TOP)
 
     # statusbar 
