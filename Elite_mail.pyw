@@ -27,12 +27,15 @@ def create_sheet():
         df = df.dropna(axis=0)
         list_to = df[:].tolist()
         # print(list_to)
+        update_status("Senders list ready")
         return list_to
     except:
         update_status("Some error with sheet")
         sleep(1)
         update_status("Ready To Go On a Ride")
         return []
+    update_status("Ready To Go On a Ride")
+
     
     
 def clear_url_box():
@@ -41,6 +44,11 @@ def clear_url_box():
     CSV_file.set("")
     Subject.set("")
     textarea.delete(1.0,END)
+    CSV_file.set()
+    CSV_file_loaction.set(f"Selected file :- {CSV_file.get()}")
+    attachment_file.set()
+    attachment_file_loaction.set(f"Selected file :- {attachment_file.get()}")
+
 def update_status(temp):
     statusvar.set(temp)
     sbar.update()
@@ -49,6 +57,7 @@ def send_start():
     t1.start()
 def Start_task():
     update_status("On a Ride")
+    sleep(1)
     send["state"] = "disabled"
     send["text"] = "WAIT"
     Select_file["state"] = "disabled"
@@ -66,7 +75,7 @@ def Start_task():
     email_body = textarea.get(1.0,END)
 
     # print(f"{email_from}\n{email_password}\n{email_subject}\n{email_body}")
-    if email_from=="" or email_password=="" or email_body=="" or email_subject == "":
+    if email_from == "" or email_password == "" or email_body == "" or email_subject == "" :
         update_status("Values can not be empty")
         sleep(1)
         update_status("Ready To Go On a Ride")
@@ -74,7 +83,7 @@ def Start_task():
         to_list = create_sheet()
         if len(to_list) > 0:
             try:
-                
+                update_status("Getting Ready to Send msg")
                 # instance of MIMEMultipart
                 msg = MIMEMultipart()
 
@@ -96,6 +105,7 @@ def Start_task():
                 try:
                     if is_attachment == 1:
                         # open the file to be sent
+                        update_status("Getting Ready to attach file")
                         
                         head, filename = os.path.split("/tmp/d/a.dat")
                         attachment = open(temp_file, "rb")
@@ -117,7 +127,7 @@ def Start_task():
                 except:
                     update_status("Error in attachment")
                     sleep(1)
-                    update_status("Ready To Go On a Ride")
+                    update_status("continue ...")
 
 
                 # creates SMTP session
@@ -132,11 +142,13 @@ def Start_task():
                 # Converts the Multipart msg into a string
                 text = msg.as_string()
 
-
                 for sender in to_list:
-                    # sending the mail
-                    msg['To'] = sender
-                    s.sendmail(email_from, sender, text)
+                    try:
+                        # sending the mail
+                        msg['To'] = sender
+                        s.sendmail(email_from, sender, text)
+                    except:
+                        pass
 
             # terminating the session
                 s.quit()
@@ -152,6 +164,7 @@ def Start_task():
             update_status("Ready To Go On a Ride")
             # clear_url_box()
             return
+    update_status("Getting Ready to Send msg")
 
 
     send["state"] = "active"
