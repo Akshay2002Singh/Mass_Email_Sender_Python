@@ -81,7 +81,8 @@ def Start_task():
         update_status("Ready To Go On a Ride")
     else:
         to_list = create_sheet()
-        if len(to_list) > 0:
+        size_total = len(to_list)
+        if size_total > 0:
             try:
                 update_status("Getting Ready to Send msg")
                 # instance of MIMEMultipart
@@ -109,7 +110,6 @@ def Start_task():
                         
                         head, filename = os.path.split(temp_file)
                         attachment = open(temp_file, "rb")
-
 
                             # instance of MIMEBase and named as p
                         p = MIMEBase('application', 'octet-stream')
@@ -142,13 +142,17 @@ def Start_task():
                 # Converts the Multipart msg into a string
                 text = msg.as_string()
                 update_status("Sending msg")
+                i=1
                 for sender in to_list:
                     try:
+                        update_status(f"Sending {i}/{size_total}")
+                        i = i + 1
                         # sending the mail
                         msg['To'] = sender
                         s.sendmail(email_from, sender, text)
                     except:
-                        pass
+                        update_status("1 Failed")
+                sleep(2) 
 
             # terminating the session
                 s.quit()
