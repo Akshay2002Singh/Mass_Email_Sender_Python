@@ -107,7 +107,7 @@ def Start_task():
                         # open the file to be sent
                         update_status("Getting Ready to attach file")
                         
-                        head, filename = os.path.split("/tmp/d/a.dat")
+                        head, filename = os.path.split(temp_file)
                         attachment = open(temp_file, "rb")
 
 
@@ -141,7 +141,7 @@ def Start_task():
 
                 # Converts the Multipart msg into a string
                 text = msg.as_string()
-
+                update_status("Sending msg")
                 for sender in to_list:
                     try:
                         # sending the mail
