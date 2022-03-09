@@ -44,9 +44,9 @@ def clear_url_box():
     CSV_file.set("")
     Subject.set("")
     textarea.delete(1.0,END)
-    CSV_file.set()
+    CSV_file.set("")
     CSV_file_loaction.set(f"Selected file :- {CSV_file.get()}")
-    attachment_file.set()
+    attachment_file.set("")
     attachment_file_loaction.set(f"Selected file :- {attachment_file.get()}")
 
 def update_status(temp):
