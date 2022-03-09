@@ -157,18 +157,17 @@ def Start_task():
             # terminating the session
                 s.quit()
             except:
-                update_status("Some Error")
+                update_status("Some Error In Login")
                 sleep(1)
                 update_status("Ready To Go On a Ride")
                 # clear_url_box()
-                return
         else:
             update_status("Some Error With Sender List")
             sleep(1)
             update_status("Ready To Go On a Ride")
             # clear_url_box()
             return
-    update_status("Getting Ready to Send msg")
+    update_status("Ready To Go On a Ride")
 
 
     send["state"] = "active"
