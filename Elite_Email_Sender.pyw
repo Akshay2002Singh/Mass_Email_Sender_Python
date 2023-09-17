@@ -10,23 +10,18 @@ from time import sleep
 from turtle import left
 import pandas as pd
 import os
+import webbrowser
 
-# 2003012005@IPEC.ORG.IN
 
 # functions
 def create_sheet():
-    update_status("Creating Excel file")
+    update_status("Creating Email list from Excel file")
     file = CSV_file.get()
-    # print(file)
-    # df = pd.read_excel (file,sheet_name='Sheet1',header=None)
-    # print(df)
     try:
         df = pd.read_excel (file,sheet_name='Sheet1',header=None)
-        # print(df)
         df = df.iloc[:,0]
         df = df.dropna(axis=0)
         list_to = df[:].tolist()
-        # print(list_to)
         update_status("Senders list ready")
         return list_to
     except:
@@ -34,7 +29,6 @@ def create_sheet():
         sleep(1)
         update_status("Ready To Go On a Ride")
         return []
-    update_status("Ready To Go On a Ride")
 
     
     
@@ -52,9 +46,11 @@ def clear_url_box():
 def update_status(temp):
     statusvar.set(temp)
     sbar.update()
+
 def send_start():
     t1 = threading.Thread(target=Start_task, name='t1')
     t1.start()
+    
 def Start_task():
     update_status("On a Ride")
     sleep(1)
@@ -81,6 +77,7 @@ def Start_task():
         update_status("Ready To Go On a Ride")
     else:
         to_list = create_sheet()
+        # print(to_list)
         size_total = len(to_list)
         if size_total > 0:
             try:
@@ -91,16 +88,13 @@ def Start_task():
                 # storing the senders email address
                 msg['From'] = email_from
 
-                    # storing the receivers email address
-                    # msg['To'] = sender
-
-                    # storing the subject
+                # storing the subject
                 msg['Subject'] = email_subject
 
-                    # string to store the body of the mail
+                # string to store the body of the mail
                 body = email_body
 
-                    # attach the body with the msg instance
+                # attach the body with the msg instance
                 msg.attach(MIMEText(body, 'plain'))
 
                 try:
@@ -111,18 +105,18 @@ def Start_task():
                         head, filename = os.path.split(temp_file)
                         attachment = open(temp_file, "rb")
 
-                            # instance of MIMEBase and named as p
+                        # instance of MIMEBase and named as p
                         p = MIMEBase('application', 'octet-stream')
 
-                            # To change the payload into encoded form
+                        # To change the payload into encoded form
                         p.set_payload((attachment).read())
 
-                            # encode into base64
+                        # encode into base64
                         encoders.encode_base64(p)
 
                         p.add_header('Content-Disposition', "attachment; filename= %s" % filename)
 
-                            # attach the instance 'p' to instance 'msg'
+                        # attach the instance 'p' to instance 'msg'
                         msg.attach(p)
                 except:
                     update_status("Error in attachment")
@@ -152,9 +146,9 @@ def Start_task():
                         s.sendmail(email_from, sender, text)
                     except:
                         update_status("1 Failed")
-                sleep(2) 
+                sleep(2)
 
-            # terminating the session
+                # terminating the session
                 s.quit()
             except:
                 update_status("Some Error In Login")
@@ -165,16 +159,19 @@ def Start_task():
             update_status("Some Error With Sender List")
             sleep(1)
             update_status("Ready To Go On a Ride")
-            # clear_url_box()
+            clear_url_box()
+            send["state"] = "active"
+            send["text"] = "SEND"
+            Select_file["state"] = "active"
+            Select_file["text"] = "SELECT CSV"
             return
+        
     update_status("Ready To Go On a Ride")
-
-
     send["state"] = "active"
     send["text"] = "SEND"
     Select_file["state"] = "active"
     Select_file["text"] = "SELECT CSV"
-    # clear_url_box()
+    clear_url_box()
 
 def Select_file():
     file=askopenfilename(defaultextension=".xlsx",filetypes =[('Excel Files', '*.xlsx'),('CSV Files', '*.csv')])
@@ -185,6 +182,11 @@ def attach_file():
     file_attachment=askopenfilename(defaultextension=".txt",filetypes=[("All Files","*")])
     attachment_file.set(file_attachment)
     attachment_file_loaction.set(f"Selected attachment file :- {attachment_file.get()}")
+
+# function to open browser
+def callback(url):
+   webbrowser.open_new_tab(url)
+
 
 # main body
 if __name__=="__main__":
@@ -210,21 +212,26 @@ if __name__=="__main__":
     CSV_file_loaction.set(f"Selected Senders file :- {CSV_file.get()}")
     attachment_file_loaction.set(f"Selected attachment file :- {attachment_file.get()}")
 
-    # code to download a video
+    
     heading1=Label(root,text="ELITE AKSHAY",font="calibre 20 bold",relief=RAISED,background="white",padx=10,pady=9)
     heading1.pack()
     space=Label(root,text="",font="calibre 2 bold")
     space.pack()
     heading2=Label(root,text="Elite Mass Email Sender",font="Times 25 bold",relief=RAISED,background="cyan",padx=10,pady=9,)
     heading2.pack()
-    # input values 
+    
+    
     f1=Frame(root)
     f1.pack(side=TOP,fill=BOTH,expand=True,pady=10)
     name=Label(f1,text="Enter Your Email ID",font="calibre 18 bold italic",relief=FLAT,padx=8,pady=5).pack()
     user_name=Entry(f1,textvariable=From_email,font="calibre 15 normal",fg="blue",relief=SUNKEN,width=45)
     user_name.pack()
-    Label(f1,text="Enter Your Password",font="calibre 18 bold italic",relief=FLAT,padx=8,pady=5).pack()
+    Label(f1,text="Enter App Password",font="calibre 18 bold italic",relief=FLAT,padx=8,pady=5).pack()
     Entry(f1,textvariable=Password,font="calibre 15 normal",fg="blue",relief=SUNKEN,width=35).pack()
+    #Create a Label to display the link to generate app password
+    api_link = Label(f1, text="Don't have App Password? Click here",font=('Helveticabold', 15), fg="blue", cursor="hand2")
+    api_link.pack()
+    api_link.bind("<Button-1>", lambda e: callback("https://support.google.com/mail/answer/185833?hl=en"))
     senders_file_location=Label(f1,textvariable=CSV_file_loaction,font="calibre 10 bold italic",relief=FLAT,padx=18,pady=3)
     senders_file_location.pack()
     attachment=Label(f1,textvariable=attachment_file_loaction,font="calibre 10 bold italic",relief=FLAT,padx=18,pady=3)
@@ -234,11 +241,12 @@ if __name__=="__main__":
     Entry(f1,textvariable=Subject,font="calibre 15 normal",fg="blue",relief=SUNKEN,width=45).pack()
     Label(f1,text="Body",font="calibre 18 bold italic",relief=FLAT,padx=8,pady=5).pack()
     # body
-    # Entry(f1,textvariable=Body,font="calibre 15 normal",fg="blue",relief=SUNKEN,width=70).pack()
-    textarea=Text(f1,font="Ariel 13 normal",height=6)
-    textarea.pack(expand=False,fill=X)
-    Scroll =Scrollbar(f1)
-    # Scroll.pack(side=RIGHT,fill=Y)
+    body_frame = Frame(f1)
+    body_frame.pack()
+    textarea=Text(body_frame,font="Ariel 13 normal",height=6)
+    textarea.pack(side='left',expand=False)
+    Scroll =Scrollbar(body_frame)
+    Scroll.pack(side=RIGHT,fill=Y)
     Scroll.config(command=textarea.yview)
     textarea.config(yscrollcommand=Scroll.set)
     
@@ -246,8 +254,6 @@ if __name__=="__main__":
     Select_file.pack(side = LEFT, expand = True, fill = X,pady=3)
     clear_url_btn=Button(f1,text="CLEAR URL",command=clear_url_box,bd=5,font="calibre 18 bold")
     clear_url_btn.pack(side = LEFT, expand = True, fill = X,pady=3)
-    # attachment_btn=Button(f1,text="ATTACH",command=attach_file,bd=5,fg="blue",font="calibre 18 bold")
-    # attachment.pack(side = LEFT, expand = True, fill = X,pady=3)
     send=Button(f1,text="SEND",command=send_start,bd=5,fg="blue",font="calibre 18 bold")
     send.pack(side = LEFT, expand = True, fill = X,pady=3)
     attachment_btn=Button(root,text="ATTACH FILE",command=attach_file,bd=5,fg="blue",font="calibre 18 bold")
